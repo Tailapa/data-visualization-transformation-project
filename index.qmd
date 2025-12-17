@@ -106,6 +106,9 @@ company_stats <- taxi |>
     tip_rate = yes_count / total_rides
   )
 
+company_stats <- company_stats |> 
+  arrange(desc(tip_rate))
+
 # 3. Create the Proportional Plot
 ggplot(taxi, aes(y = company, fill = tip)) +
   # Create the proportional bars
@@ -148,17 +151,24 @@ ggplot(taxi, aes(y = company, fill = tip)) +
     panel.grid.minor = element_blank(),
     plot.title = element_text(face = "bold", size = 16)
   )
+
+```
+
+```{r}
+#| label: Sorting company stats by number of rides
+company_stats_by_rides <- company_stats |> 
+  arrange(desc(total_rides))
 ```
 
 ### Analysis of Tipping Rate Comparison
 
 The data indicates that **Chicago Independents** has the highest tipping rate among all the taxi companies in the dataset.
 
-1.  Tipping Rate of Chicago Independents is relatively higher at **`r percent(company_stats$tip_rate[company_stats$company == "Chicago Independents"], accuracy = 0.1)`**, compared to the overall tipping rate average of all companies, which is **`r percent(overall_rate, accuracy = 0.1)`**.
+1.  Tipping Rate of **`r company_stats$company[1]`** is relatively higher at **`r percent(company_stats$tip_rate[company_stats$company == "Chicago Independents"], accuracy = 0.1)`**, compared to the overall tipping rate average of all companies, which is **`r percent(overall_rate, accuracy = 0.1)`**.
 
-2.  When compared to other major comapnies, Chicago Independents outperforms **Flash Cab** (86.9%) by a wide margin of \~ 8 percentage points and edges out its closest competitor, **Sun Taxi** (93.9%).
+2.  When compared to other major comapnies, **`r company_stats$company[1]`** outperforms **`r company_stats$company[nrow(company_stats)]`** by a wide margin of **`r percent(company_stats$tip_rate[1] - company_stats$tip_rate[nrow(company_stats)], accuracy = 0.1)`** percentage points and edges out its closest competitor, **`r company_stats$company[2]`** by **`r percent(company_stats$tip_rate[1] - company_stats$tip_rate[2], accuracy = 0.1)`** percentage points.
 
-3.  **However,** Chicago Independents has a smaller volume of total rides (781) compared to giants like Taxi Affiliation Services (1,694), their proportional success in securing tips is superior.
+3.  However, **`r company_stats$company[1]`** has a smaller volume of total rides `r company_stats$total_rides[1]` (**`r percent(company_stats$total_rides[1]/sum(company_stats$total_rides), accuracy = 0.1)`**), compared to giants like **`r company_stats_by_rides$company[2]`**, whose proportion of ride share is, **`r percent(company_stats_by_rides$total_rides[2]/sum(company_stats$total_rides), accuracy = 0.1)`**. Nevertheless, **`r company_stats$company[1]`'** proportional success in securing tips is superior.
 
 Yes, passengers tend to tip more for **Chicago Independents**. In a geometric breakdown of tipping proportions, the "Yes" segment for Chicago Independents occupies the largest relative area of the bar compared to all other categories. This suggests that despite being a smaller player in terms of ride volume, the company maintains a higher-than-average level of passenger tipping satisfaction.
 
