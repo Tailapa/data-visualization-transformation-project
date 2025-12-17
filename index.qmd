@@ -150,4 +150,16 @@ ggplot(taxi, aes(y = company, fill = tip)) +
   )
 ```
 
+### Analysis of Tipping Rate Comparison
+
+The data indicates that **Chicago Independents** has the highest tipping rate among all the taxi companies in the dataset.
+
+1.  Tipping Rate of Chicago Independents is relatively higher at **`r percent(company_stats$tip_rate[company_stats$company == "Chicago Independents"], accuracy = 0.1)`**, compared to the overall tipping rate average of all companies, which is **`r percent(overall_rate, accuracy = 0.1)`**.
+
+2.  When compared to other major comapnies, Chicago Independents outperforms **Flash Cab** (86.9%) by a wide margin of \~ 8 percentage points and edges out its closest competitor, **Sun Taxi** (93.9%).
+
+3.  **However,** Chicago Independents has a smaller volume of total rides (781) compared to giants like Taxi Affiliation Services (1,694), their proportional success in securing tips is superior.
+
+Yes, passengers tend to tip more for **Chicago Independents**. In a geometric breakdown of tipping proportions, the "Yes" segment for Chicago Independents occupies the largest relative area of the bar compared to all other categories. This suggests that despite being a smaller player in terms of ride volume, the company maintains a higher-than-average level of passenger tipping satisfaction.
+
 ## Your own question
