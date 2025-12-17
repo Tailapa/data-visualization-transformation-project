@@ -170,6 +170,6 @@ The data indicates that **Chicago Independents** has the highest tipping rate am
 
 3.  However, **`r company_stats$company[1]`** has a smaller volume of total rides `r company_stats$total_rides[1]` (**`r percent(company_stats$total_rides[1]/sum(company_stats$total_rides), accuracy = 0.1)`**), compared to giants like **`r company_stats_by_rides$company[2]`**, whose proportion of ride share is, **`r percent(company_stats_by_rides$total_rides[2]/sum(company_stats$total_rides), accuracy = 0.1)`**. Nevertheless, **`r company_stats$company[1]`'** proportional success in securing tips is superior.
 
-Yes, passengers tend to tip more for **Chicago Independents**. In a geometric breakdown of tipping proportions, the "Yes" segment for Chicago Independents occupies the largest relative area of the bar compared to all other categories. This suggests that despite being a smaller player in terms of ride volume, the company maintains a higher-than-average level of passenger tipping satisfaction.
+Therefore, despite being a smaller player in terms of ride volume, the **`r company_stats$company[1]`** maintain an above average rate of passenger tipping .
 
 ## Your own question
