@@ -6,6 +6,8 @@ echo: true
 bibliography: references.bib
 editor_options: 
   chunk_output_type: console
+execute: 
+  warning: false
 ---
 
 ### Note
@@ -33,7 +35,7 @@ library(scales)
 library(modeldata)
 ```
 
-### Summarize and glimpse the dataset
+### Summarize and glimpse of the dataset
 
 ```{r}
 #| label: glimpse
@@ -52,15 +54,23 @@ ggplot(taxi, aes(x = tip, y = distance, fill = tip)) +
   labs(title = "Relationship between Trip Distance and Tipping",
        x = "Did the passenger tip?",
        y = "Distance (miles)") +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold", size = 16)
+  )
 
 # Summary Table
-mean_median_distance_tipping <- taxi %>%
-  group_by(tip) %>%
+mean_median_distance_tipping <- taxi |>
+  group_by(tip) |>
   summarize(mean_dist = mean(distance, na.rm = TRUE),
             median_dist = median(distance, na.rm = TRUE),
             n = n())
+```
 
+```{r}
+#| label: Extracting mean and median Values
+#| echo: false
 # Assigning values
 mean_distance_y <- mean_median_distance_tipping |> filter(tip == "yes") |> pull(mean_dist)
 mean_distance_n <-mean_median_distance_tipping |> filter(tip == "no") |> pull(mean_dist)
@@ -72,14 +82,72 @@ med_dist_n <-mean_median_distance_tipping |> filter(tip == "no") |> pull(median_
 
 There is a linear relationship between the distance traveled and whether a passenger tips for longer distances.
 
-1.  **Higher Average Distance:** Passengers who tipped traveled an average of **`r round(mean_distance_y, 2)` miles**, which is nearly **`r round(((mean_distance_y-mean_distance_n)/mean_distance_n)*100, 2)`% more** than those who did not tip (**`r round(mean_distance_n, 2)` miles**).
+1.  Passengers who tipped traveled an average of **`r round(mean_distance_y, 2)` miles**, which is nearly **`r round(((mean_distance_y-mean_distance_n)/mean_distance_n)*100, 2)`% more** than those who did not tip (**`r round(mean_distance_n, 2)` miles**).
 
-2.  **The Median Gap:** Compared to the means, the medians are much closer (**`r med_dist_y` v/s `r med_dist_n`**) . This suggests that the "yes" group (those who tipped) mostly travelled long trips (outliers) that drives the average up.
+2.  Compared to the means, the medians are much closer (**`r med_dist_y` v/s `r med_dist_n`**) . This suggests that the "yes" group (those who tipped) mostly travelled long trips (outliers) that drives the average up.
 
-3.  **Initial Conclusion:** Tipping appears more common on longer trips. This makes sense intuitively—passengers may feel that a longer commitment of the driver's time warrants a tip, or the higher total fare makes a percentage-based tip feel more standard.
+3.  Therefore, tipping seems to be more common on longer trips.
 
 ## Do taxi passengers tend to tip more for the company Chicago Independents than the other companies?
 
-## 
+```{r}
+#| label: Analyse tips for each company
+#| message: false
+
+# 1. Calculate the overall city average rate (as a decimal)
+overall_rate <- mean(taxi$tip == "yes")
+
+# 2. Calculate the tipping rate per company for the labels
+company_stats <- taxi |>
+  group_by(company) |>
+  summarize(
+    total_rides = n(),
+    yes_count = sum(tip == "yes"),
+    tip_rate = yes_count / total_rides
+  )
+
+# 3. Create the Proportional Plot
+ggplot(taxi, aes(y = company, fill = tip)) +
+  # Create the proportional bars
+  geom_bar(position = "fill") +
+  # Add the tip rate labels onto each bar
+  geom_text(
+    data = company_stats,
+    aes(y = company, x = 0.5, label = percent(tip_rate, accuracy = 0.1)),
+    inherit.aes = FALSE,
+    color = "white",
+    fontface = "bold",
+    size = 4
+  ) +
+  # Add the vertical line for the city average
+  geom_vline(xintercept = overall_rate, linetype = "dashed", color = "white", size = 1) +
+  # Annotate the line with the numerical value
+  annotate(
+    "text", 
+    x = overall_rate, 
+    y = 0.5, 
+    label = paste0("City Average = ", percent(overall_rate, accuracy = 0.1)),
+    color = "black", 
+    vjust = -0.5, 
+    hjust = -0.5,
+    angle = 90,
+    fontface = "bold"
+  ) +
+  # Clean up scales and labels
+  scale_x_continuous(labels = percent) +
+  scale_fill_manual(values = c("no" = "#E63946", "yes" = "#2A9D8F")) + # Clean vector-style colors
+  labs(
+    title = "Tipping Rate Comparison by Company",
+    subtitle = "Is Chicago Independents outperforming the city average?",
+    x = "Proportion of Trips",
+    y = "Taxi Company",
+    fill = "Tip Received"
+  ) +
+  theme_minimal() +
+  theme(
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold", size = 16)
+  )
+```
 
 ## Your own question
