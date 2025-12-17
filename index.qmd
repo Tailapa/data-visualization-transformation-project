@@ -2,26 +2,84 @@
 title: "Project"
 author: "Shashank"
 subtitle: "Investigation into Chicago taxis"
-echo: false
+echo: true
 bibliography: references.bib
+editor_options: 
+  chunk_output_type: console
 ---
 
-## Packages 
+### Note
+
+1.  Depending on the purpose of the project, it may be advantageous to either show or hide all of your code in your rendered document. In this project, I've set echo = true so that the coding is visible.
+
+2.  The `taxi` dataset is a pre-packaged R data set available in the **`modeldata`** package. This specific dataset contains information on a subset of taxi trips in **Chicago in 2022**, and is used for demonstrating or testing model-related R packages. 
+
+## Packages
 
 ```{r}
-#| warning: false
+#| label: Loading packages
 #| message: false
+#| warning: false
 library(tidyverse)
 library(tidymodels)
 library(scales)
+
 ```
 
-## Question 1
+## Data Frame
 
+```{r}
+#| label: Loading dataset
+library(modeldata)
+```
 
-## Question 2 
+### Summarize and glimpse the dataset
 
+```{r}
+#| label: glimpse
+glimpse(taxi)
+```
 
-## Your own question 
+The `taxi` dataframe has **`r nrow(taxi)`** rows and **`r ncol(taxi)`** columns.
 
+## Is there there a relationship between the distance (in miles) someone travels in a taxi and if they tip or not?
 
+```{r}
+#| label: Examining if there is a relationship between distance travelled and tip
+# Visualization
+ggplot(taxi, aes(x = tip, y = distance, fill = tip)) +
+  geom_boxplot() +
+  labs(title = "Relationship between Trip Distance and Tipping",
+       x = "Did the passenger tip?",
+       y = "Distance (miles)") +
+  theme_minimal()
+
+# Summary Table
+mean_median_distance_tipping <- taxi %>%
+  group_by(tip) %>%
+  summarize(mean_dist = mean(distance, na.rm = TRUE),
+            median_dist = median(distance, na.rm = TRUE),
+            n = n())
+
+# Assigning values
+mean_distance_y <- mean_median_distance_tipping |> filter(tip == "yes") |> pull(mean_dist)
+mean_distance_n <-mean_median_distance_tipping |> filter(tip == "no") |> pull(mean_dist)
+med_dist_y <-mean_median_distance_tipping |> filter(tip == "yes") |> pull(median_dist)
+med_dist_n <-mean_median_distance_tipping |> filter(tip == "no") |> pull(median_dist)
+```
+
+### Analysis of Distance vs. Tipping
+
+There is a linear relationship between the distance traveled and whether a passenger tips for longer distances.
+
+1.  **Higher Average Distance:** Passengers who tipped traveled an average of **`r round(mean_distance_y, 2)` miles**, which is nearly **`r round(((mean_distance_y-mean_distance_n)/mean_distance_n)*100, 2)`% more** than those who did not tip (**`r round(mean_distance_n, 2)` miles**).
+
+2.  **The Median Gap:** Compared to the means, the medians are much closer (**`r med_dist_y` v/s `r med_dist_n`**) . This suggests that the "yes" group likely contains several very long trips (outliers) that are driving the average up.
+
+3.  **Initial Conclusion:** Tipping appears more common on longer trips. This makes sense intuitively—passengers may feel that a longer commitment of the driver's time warrants a tip, or the higher total fare makes a percentage-based tip feel more standard.
+
+## Do taxi passengers tend to tip more for the company Chicago Independents than the other companies?
+
+## 
+
+## Your own question

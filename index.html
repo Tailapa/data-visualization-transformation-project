@@ -21,6 +21,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -71,14 +106,90 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="note" class="level3">
+<h3 class="anchored" data-anchor-id="note">Note</h3>
+<ol type="1">
+<li><p>Depending on the purpose of the project, it may be advantageous to either show or hide all of your code in your rendered document. In this project, I’ve set echo = true so that the coding is visible.</p></li>
+<li><p>The <code>taxi</code> dataset is a pre-packaged R data set available in the <strong><code>modeldata</code></strong> package. This specific dataset contains information on a subset of taxi trips in <strong>Chicago in 2022</strong>, and is used for demonstrating or testing model-related R packages.&nbsp;</p></li>
+</ol>
+</section>
 <section id="packages" class="level2">
 <h2 class="anchored" data-anchor-id="packages">Packages</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="question-1" class="level2">
-<h2 class="anchored" data-anchor-id="question-1">Question 1</h2>
+<section id="data-frame" class="level2">
+<h2 class="anchored" data-anchor-id="data-frame">Data Frame</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modeldata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="summarize-and-glimpse-the-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="summarize-and-glimpse-the-dataset">Summarize and glimpse the dataset</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(taxi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 10,000
+Columns: 7
+$ tip      &lt;fct&gt; yes, yes, yes, yes, yes, yes, yes, yes, yes, yes, yes, yes, y…
+$ distance &lt;dbl&gt; 17.19, 0.88, 18.11, 20.70, 12.23, 0.94, 17.47, 17.67, 1.85, 1…
+$ company  &lt;fct&gt; Chicago Independents, City Service, other, Chicago Independen…
+$ local    &lt;fct&gt; no, yes, no, no, no, yes, no, no, no, no, no, no, no, yes, no…
+$ dow      &lt;fct&gt; Thu, Thu, Mon, Mon, Sun, Sat, Fri, Sun, Fri, Tue, Tue, Sun, W…
+$ month    &lt;fct&gt; Feb, Mar, Feb, Apr, Mar, Apr, Mar, Jan, Apr, Mar, Mar, Apr, A…
+$ hour     &lt;int&gt; 16, 8, 18, 8, 21, 23, 12, 6, 12, 14, 18, 11, 12, 19, 17, 13, …</code></pre>
+</div>
+</div>
+<p>The <code>taxi</code> dataframe has <strong>10000</strong> rows and <strong>7</strong> columns.</p>
 </section>
-<section id="question-2" class="level2">
-<h2 class="anchored" data-anchor-id="question-2">Question 2</h2>
+</section>
+<section id="is-there-there-a-relationship-between-the-distance-in-miles-someone-travels-in-a-taxi-and-if-they-tip-or-not" class="level2">
+<h2 class="anchored" data-anchor-id="is-there-there-a-relationship-between-the-distance-in-miles-someone-travels-in-a-taxi-and-if-they-tip-or-not">Is there there a relationship between the distance (in miles) someone travels in a taxi and if they tip or not?</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualization</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(taxi, <span class="fu">aes</span>(<span class="at">x =</span> tip, <span class="at">y =</span> distance, <span class="at">fill =</span> tip)) <span class="sc">+</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Relationship between Trip Distance and Tipping"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Did the passenger tip?"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Distance (miles)"</span>) <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/Examining%20if%20there%20is%20a%20relationship%20between%20distance%20travelled%20and%20tip-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary Table</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>mean_median_distance_tipping <span class="ot">&lt;-</span> taxi <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(tip) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_dist =</span> <span class="fu">mean</span>(distance, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">median_dist =</span> <span class="fu">median</span>(distance, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">n =</span> <span class="fu">n</span>())</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Assigning values</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>mean_distance_y <span class="ot">&lt;-</span> mean_median_distance_tipping <span class="sc">|&gt;</span> <span class="fu">filter</span>(tip <span class="sc">==</span> <span class="st">"yes"</span>) <span class="sc">|&gt;</span> <span class="fu">pull</span>(mean_dist)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>mean_distance_n <span class="ot">&lt;-</span>mean_median_distance_tipping <span class="sc">|&gt;</span> <span class="fu">filter</span>(tip <span class="sc">==</span> <span class="st">"no"</span>) <span class="sc">|&gt;</span> <span class="fu">pull</span>(mean_dist)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>med_dist_y <span class="ot">&lt;-</span>mean_median_distance_tipping <span class="sc">|&gt;</span> <span class="fu">filter</span>(tip <span class="sc">==</span> <span class="st">"yes"</span>) <span class="sc">|&gt;</span> <span class="fu">pull</span>(median_dist)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>med_dist_n <span class="ot">&lt;-</span>mean_median_distance_tipping <span class="sc">|&gt;</span> <span class="fu">filter</span>(tip <span class="sc">==</span> <span class="st">"no"</span>) <span class="sc">|&gt;</span> <span class="fu">pull</span>(median_dist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="analysis-of-distance-vs.-tipping" class="level3">
+<h3 class="anchored" data-anchor-id="analysis-of-distance-vs.-tipping">Analysis of Distance vs.&nbsp;Tipping</h3>
+<p>There is a linear relationship between the distance traveled and whether a passenger tips for longer distances.</p>
+<ol type="1">
+<li><p><strong>Higher Average Distance:</strong> Passengers who tipped traveled an average of <strong>6.37 miles</strong>, which is nearly <strong>39.35% more</strong> than those who did not tip (<strong>4.57 miles</strong>).</p></li>
+<li><p><strong>The Median Gap:</strong> Compared to the means, the medians are much closer (<strong>1.79 v/s 1.66</strong>) . This suggests that the “yes” group likely contains several very long trips (outliers) that are driving the average up.</p></li>
+<li><p><strong>Initial Conclusion:</strong> Tipping appears more common on longer trips. This makes sense intuitively—passengers may feel that a longer commitment of the driver’s time warrants a tip, or the higher total fare makes a percentage-based tip feel more standard.</p></li>
+</ol>
+</section>
+</section>
+<section id="do-taxi-passengers-tend-to-tip-more-for-the-company-chicago-independents-than-the-other-companies" class="level2">
+<h2 class="anchored" data-anchor-id="do-taxi-passengers-tend-to-tip-more-for-the-company-chicago-independents-than-the-other-companies">Do taxi passengers tend to tip more for the company Chicago Independents than the other companies?</h2>
+</section>
+<section id="section" class="level2">
+<h2 class="anchored" data-anchor-id="section"></h2>
 </section>
 <section id="your-own-question" class="level2">
 <h2 class="anchored" data-anchor-id="your-own-question">Your own question</h2>
