@@ -1,20 +1,29 @@
 ---
 title: "An Analysis of Chicago Taxi Trips"
+subtitle: "Investigating the Geometry of Tipping Behavior"
 author: "Shashank Venkatesh"
-subtitle: "Investigation into Chicago taxis"
-echo: false
+date: last-modified
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 2
+    toc-location: left
+    code-fold: false
+    code-tools: true
+    embed-resources: true
+execute:
+  echo: true
+  warning: false
+  message: false
 bibliography: references.bib
 editor_options: 
   chunk_output_type: console
-execute: 
-  warning: false
 ---
 
 ### Note
 
-1.  Depending on the purpose of the project, it may be advantageous to either show or hide all of your code in your rendered document. In this project, I've set echo = true so that the coding is visible.
-
-2.  The `taxi` dataset is a pre-packaged R data set available in the **`modeldata`** package. This specific dataset contains information on a subset of taxi trips in **Chicago in 2022**, and is used for demonstrating or testing model-related R packages. 
+1.  The `taxi` dataset is a pre-packaged R data set available in the **`modeldata`** package. This specific dataset contains information on a subset of taxi trips in **Chicago in 2022**, and is used for demonstrating or testing model-related R packages. 
 
 ## Packages
 
@@ -33,7 +42,7 @@ For this **Analysis of Chicago Taxi Trips,** we are using the following packages
 library(tidyverse)
 library(tidymodels)
 library(scales)
-
+knitr::opts_chunk$set(fig.width = 9, fig.height = 5, fig.align = "center")
 ```
 
 ## Data Frame
