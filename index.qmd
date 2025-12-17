@@ -2,7 +2,7 @@
 title: "An Analysis of Chicago Taxi Trips"
 author: "Shashank Venkatesh"
 subtitle: "Investigation into Chicago taxis"
-echo: true
+echo: false
 bibliography: references.bib
 editor_options: 
   chunk_output_type: console
@@ -18,6 +18,14 @@ execute:
 
 ## Packages
 
+For this **Analysis of Chicago Taxi Trips,** we are using the following packages:
+
+1.  `tidyverse`
+
+2.  `tidymodels`
+
+3.  `scales`
+
 ```{r}
 #| label: Loading packages
 #| message: false
@@ -30,6 +38,8 @@ library(scales)
 
 ## Data Frame
 
+The dataframe that we are using in this analysis is prepackaged in the R library `modeldata`
+
 ```{r}
 #| label: Loading dataset
 library(modeldata)
@@ -37,12 +47,12 @@ library(modeldata)
 
 ### Summarize and glimpse of the dataset
 
+The `taxi` dataframe has **`r nrow(taxi)`** rows and **`r ncol(taxi)`** columns.
+
 ```{r}
 #| label: glimpse
 glimpse(taxi)
 ```
-
-The `taxi` dataframe has **`r nrow(taxi)`** rows and **`r ncol(taxi)`** columns.
 
 ## Is there there a relationship between the distance (in miles) someone travels in a taxi and if they tip or not?
 
@@ -192,14 +202,17 @@ ggplot(hourly_tips, aes(x = hour, y = tip_rate)) +
   # Add a subtle shaded area (vector style)
   geom_area(fill = "#2A9D8F", alpha = 0.2) + 
   # Bold geometric line
-  geom_line(color = "#2A9D8F", size = 1.2) +
+  geom_line(color = "#2A9D8F", size = 1) +
   # Points for each hour
   geom_point(color = "#2A9D8F", size = 2) +
   # Benchmark city average line
-  geom_hline(yintercept = overall_rate, linetype = "dashed", color = "#E63946") +
-  annotate("text", x = 2, y = overall_rate + 0.01, 
-           label = "City Average", color = "#E63946", fontface = "bold") +
-  scale_y_continuous(labels = percent, limits = c(0.8, 1)) +
+  geom_hline(yintercept = overall_rate, linetype = "dashed", color = "black") +
+  annotate("text", x = 10, y = overall_rate + 0.01, 
+           label = paste0(
+             "Average Tipping probability = ", 
+             percent(overall_rate, accuracy = 0.1)), 
+           color = "black", fontface = "bold") +
+  scale_y_continuous(labels = percent, limits = c(0.9, 1)) +
   scale_x_continuous(breaks = 0:23) +
   labs(
     title = "Does the Time of Day Influence Tipping?",
@@ -213,3 +226,13 @@ ggplot(hourly_tips, aes(x = hour, y = tip_rate)) +
     plot.title = element_text(face = "bold", size = 16)
     )
 ```
+
+The temporal data reveals the hourly fluctuation in tipping behavior in Chicago taxis throughout the day, showing distinct peaks during late-night and early-morning hours.
+
+1.  **The Happy Hours:** Interestingly, the highest tipping rates occur in the very early morning. Both **2:00 AM** and **4:00 AM** show a tipping rate of **100%** (though it should be noted these hours have lower ride volumes of **`r hourly_tips$total_rides[hourly_tips$hour == 2]` and `r hourly_tips$total_rides[hourly_tips$hour == 4]`** respectively).
+
+2.  **Dip during noon:** The tipping rate fluctuates during high ride-volume periods. For instance, at **12:00 PM** (noon), when ride volume is high (**`r hourly_tips$total_rides[hourly_tips$hour == 12]`** rides), the tip rate dips to **`r percent(hourly_tips$tip_rate[hourly_tips$hour == 12], accuracy = 0.1)`**.
+
+3.  **Evening Surge:** Towards the end of the day, the tipping rate tends to increase. From **5:00 PM (17:00)** to **8:00 PM (20:00)**, the tipping rate rises from **`r percent(hourly_tips$tip_rate[hourly_tips$hour == 17], accuracy = 0.1)`** to **`r percent(hourly_tips$tip_rate[hourly_tips$hour == 20], accuracy = 0.1)`**.
+
+Therefore, time of the ride seems to influence tipping. Passengers during the late evening and early morning hours tend to tip at rates higher than Chicago's average tipping probability of **`r percent(overall_rate, accuracy = 0.1)`**. Further, the "perfect" scores at 2:00 AM and 4:00 AM are more likely to be skewed by low sample sizes. However, the general expected trend is for the evening and mid-night passengers to be more consistent tippers than their mid-day counterparts.
