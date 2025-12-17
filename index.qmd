@@ -176,5 +176,40 @@ Therefore, despite being a smaller player in terms of ride volume, the **`r comp
 
 ```{r}
 #| label: Analysis of tipping during late-night hours
+#| message: false
+#| warning: false
 
+# 1. Calculate tip rate by hour
+hourly_tips <- taxi |>
+  group_by(hour) |>
+  summarize(
+    total_rides = n(),
+    tip_rate = sum(tip == "yes") / total_rides
+  )
+
+# 2. Geometric Line Plot
+ggplot(hourly_tips, aes(x = hour, y = tip_rate)) +
+  # Add a subtle shaded area (vector style)
+  geom_area(fill = "#2A9D8F", alpha = 0.2) + 
+  # Bold geometric line
+  geom_line(color = "#2A9D8F", size = 1.2) +
+  # Points for each hour
+  geom_point(color = "#2A9D8F", size = 2) +
+  # Benchmark city average line
+  geom_hline(yintercept = overall_rate, linetype = "dashed", color = "#E63946") +
+  annotate("text", x = 2, y = overall_rate + 0.01, 
+           label = "City Average", color = "#E63946", fontface = "bold") +
+  scale_y_continuous(labels = percent, limits = c(0.8, 1)) +
+  scale_x_continuous(breaks = 0:23) +
+  labs(
+    title = "Does the Time of Day Influence Tipping?",
+    subtitle = "Tipping rates plotted across a 24-hour cycle",
+    x = "Hour of Day (0 = Midnight)",
+    y = "Tipping Probability"
+  ) +
+  theme_minimal() +
+  theme(
+    panel.grid.minor = element_blank(), 
+    plot.title = element_text(face = "bold", size = 16)
+    )
 ```
