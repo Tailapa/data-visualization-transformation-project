@@ -74,7 +74,7 @@ There is a linear relationship between the distance traveled and whether a passe
 
 1.  **Higher Average Distance:** Passengers who tipped traveled an average of **`r round(mean_distance_y, 2)` miles**, which is nearly **`r round(((mean_distance_y-mean_distance_n)/mean_distance_n)*100, 2)`% more** than those who did not tip (**`r round(mean_distance_n, 2)` miles**).
 
-2.  **The Median Gap:** Compared to the means, the medians are much closer (**`r med_dist_y` v/s `r med_dist_n`**) . This suggests that the "yes" group likely contains several very long trips (outliers) that are driving the average up.
+2.  **The Median Gap:** Compared to the means, the medians are much closer (**`r med_dist_y` v/s `r med_dist_n`**) . This suggests that the "yes" group (those who tipped) mostly travelled long trips (outliers) that drives the average up.
 
 3.  **Initial Conclusion:** Tipping appears more common on longer trips. This makes sense intuitively—passengers may feel that a longer commitment of the driver's time warrants a tip, or the higher total fare makes a percentage-based tip feel more standard.
 
