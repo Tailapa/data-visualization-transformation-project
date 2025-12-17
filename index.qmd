@@ -175,6 +175,7 @@ ggplot(taxi, aes(y = company, fill = tip)) +
 
 ```{r}
 #| label: Sorting company stats by number of rides
+#| echo: false
 company_stats_by_rides <- company_stats |> 
   arrange(desc(total_rides))
 ```
