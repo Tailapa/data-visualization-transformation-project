@@ -54,7 +54,7 @@ The dataframe that we are using in this analysis is prepackaged in the R library
 library(modeldata)
 ```
 
-### Summarize and glimpse of the dataset
+### A glimpse into the taxi dataset
 
 The `taxi` dataframe has **`r nrow(taxi)`** rows and **`r ncol(taxi)`** columns.
 
