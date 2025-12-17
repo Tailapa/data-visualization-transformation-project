@@ -245,3 +245,11 @@ The temporal data reveals the hourly fluctuation in tipping behavior in Chicago 
 3.  **Evening Surge:** Towards the end of the day, the tipping rate tends to increase. From **5:00 PM (17:00)** to **8:00 PM (20:00)**, the tipping rate rises from **`r percent(hourly_tips$tip_rate[hourly_tips$hour == 17], accuracy = 0.1)`** to **`r percent(hourly_tips$tip_rate[hourly_tips$hour == 20], accuracy = 0.1)`**.
 
 Therefore, time of the ride seems to influence tipping. Passengers during the late evening and early morning hours tend to tip at rates higher than Chicago's average tipping probability of **`r percent(overall_rate, accuracy = 0.1)`**. Further, the "perfect" scores at 2:00 AM and 4:00 AM are more likely to be skewed by low sample sizes. However, the general expected trend is for the evening and mid-night passengers to be more consistent tippers than their mid-day counterparts.
+
+## Conclusion
+
+The investigation into the Chicago taxi market illustrates that tipping behavior is not random and is rather moulded by the interplay of 3 factors - **distance, passenger, and time.**
+
+There is a strong shift in tipping probability as mileage increases. The significantly higher mean distance for tippers (**6.37 miles**) suggests that long journeys are the primary drivers of consistent tipping behavior. Among the taxi-enterprises, **Chicago Independents**, despite having a smaller market share of only **7.8%**, maintain a dominant tipping rate of **94.9%**, thus outperforming other industry players and exceeding the average city tipping rate of 92.1%. Tipping behavior also fluctuates over a 24-hour period. The tipping probability peaks during the late-night and early-morning hours, consistently exceeding the **92.1%** city average towards the end of the day.
+
+Overall, one can expect a typical Chicago taxi trip to be short and local. However, we estimate the most ideal tipping scenario by the maximum overlap of our three variables, which **on average, is a [long-distance trip during late nights, especially when the service provider is Chicago Independents.]{.underline}**
