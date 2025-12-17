@@ -110,13 +110,13 @@ There is a linear relationship between the distance traveled and whether a passe
 ## Do taxi passengers tend to tip more for the company Chicago Independents than the other companies?
 
 ```{r}
-#| label: Analyse tips for each company
+#| label: Analysing tipping stats of each company
 #| message: false
 
-# 1. Calculate the overall city average rate (as a decimal)
+# 1. Calculating the overall city average rate (as a decimal)
 overall_rate <- mean(taxi$tip == "yes")
 
-# 2. Calculate the tipping rate per company for the labels
+# 2. Calculating the tipping rate per company for the labels
 company_stats <- taxi |>
   group_by(company) |>
   summarize(
@@ -128,11 +128,11 @@ company_stats <- taxi |>
 company_stats <- company_stats |> 
   arrange(desc(tip_rate))
 
-# 3. Create the Proportional Plot
+# 3. Creating the Plot
 ggplot(taxi, aes(y = company, fill = tip)) +
-  # Create the proportional bars
+  # Creating the graph bar
   geom_bar(position = "fill") +
-  # Add the tip rate labels onto each bar
+  # Adding the tip rate labels onto each bar
   geom_text(
     data = company_stats,
     aes(y = company, x = 0.5, label = percent(tip_rate, accuracy = 0.1)),
@@ -141,9 +141,9 @@ ggplot(taxi, aes(y = company, fill = tip)) +
     fontface = "bold",
     size = 4
   ) +
-  # Add the vertical line for the city average
+  # Adding the vertical line for the overall city average
   geom_vline(xintercept = overall_rate, linetype = "dashed", color = "white", size = 1) +
-  # Annotate the line with the numerical value
+  # Annotating the line with the numerical value
   annotate(
     "text", 
     x = overall_rate, 
@@ -155,7 +155,7 @@ ggplot(taxi, aes(y = company, fill = tip)) +
     angle = 90,
     fontface = "bold"
   ) +
-  # Clean up scales and labels
+  # Cleaning up scales and labels
   scale_x_continuous(labels = percent) +
   scale_fill_manual(values = c("no" = "#E63946", "yes" = "#2A9D8F")) + # Clean vector-style colors
   labs(
@@ -198,7 +198,7 @@ Therefore, despite being a smaller player in terms of ride volume, the **`r comp
 #| message: false
 #| warning: false
 
-# 1. Calculate tip rate by hour
+# 1. Calculating tip rate by hour
 hourly_tips <- taxi |>
   group_by(hour) |>
   summarize(
@@ -206,15 +206,14 @@ hourly_tips <- taxi |>
     tip_rate = sum(tip == "yes") / total_rides
   )
 
-# 2. Geometric Line Plot
+# 2. Plotting the Geometric Line Plot
 ggplot(hourly_tips, aes(x = hour, y = tip_rate)) +
-  # Add a subtle shaded area (vector style)
   geom_area(fill = "#2A9D8F", alpha = 0.2) + 
-  # Bold geometric line
+  # Adding geometric line
   geom_line(color = "#2A9D8F", size = 1) +
-  # Points for each hour
+  # Adding Points for each hour
   geom_point(color = "#2A9D8F", size = 2) +
-  # Benchmark city average line
+  # Adding a baseline - city average line
   geom_hline(yintercept = overall_rate, linetype = "dashed", color = "black") +
   annotate("text", x = 10, y = overall_rate + 0.01, 
            label = paste0(
