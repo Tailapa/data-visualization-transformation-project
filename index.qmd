@@ -1,6 +1,6 @@
 ---
-title: "Project"
-author: "Shashank"
+title: "An Analysis of Chicago Taxi Trips"
+author: "Shashank Venkatesh"
 subtitle: "Investigation into Chicago taxis"
 echo: true
 bibliography: references.bib
@@ -172,4 +172,9 @@ The data indicates that **Chicago Independents** has the highest tipping rate am
 
 Therefore, despite being a smaller player in terms of ride volume, the **`r company_stats$company[1]`** maintain an above average rate of passenger tipping .
 
-## Your own question
+## Are passengers more likely to tip during late-night hours compared to the rest of the day?
+
+```{r}
+#| label: Analysis of tipping during late-night hours
+
+```
